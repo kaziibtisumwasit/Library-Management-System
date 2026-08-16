@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+<title>Home Page</title>
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Page Heading -->
+<div class="text-center mb-4">
+    <h1 class="fw-bold">Library Books</h1>
+    <p class="text-muted">Browse and borrow your favorite books</p>
+</div>
+
+
+<!-- Category Section -->
+<div class="mb-4">
+
+    <h5 class="mb-3">Categories</h5>
+
+    <a href="{% url 'home' %}" class="btn btn-dark btn-sm me-2 mb-2">
+        All
+    </a>
+
+    {% for category in categories %}
+
+        <a href="{% url 'category_books' category.id %} " class="btn btn-outline-primary btn-sm me-2 mb-2">
+            {{ category.name }}
+        </a>
+
+    {% endfor %}
+
+</div>
+
+
+<!-- Books -->
+<div class="row g-4">
+
+    {% for book in books %}
+
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+        <div class="card h-100 shadow-sm">
+
+            <!-- Book Image -->
+            {% if book.image %}
+
+                <img
+                    src="{{ book.image.url }}"
+                    class="card-img-top"
+                    alt="{{ book.title }}"
+                    style="height: 280px; object-fit: cover;">
+
+            {% endif %}
+
+
+            <div class="card-body d-flex flex-column">
+
+                <!-- Category -->
+                <p class="mb-2">
+                    <span class="badge bg-secondary">
+                        {{ book.category.name }}
+                    </span>
+                </p>
+
+
+                <!-- Book Title -->
+                <h5 class="card-title fw-bold">
+                    {{ book.title }}
+                </h5>
+
+
+                <!-- Description -->
+                <p class="card-text text-muted">
+                    {{ book.description|truncatewords:15 }}
+                </p>
+
+
+                <!-- Price + Button -->
+                <div class="mt-auto">
+
+                    <h5 class="fw-bold mb-3">
+                        ৳{{ book.borrowing_price }}
+                    </h5>
+
+                    <div class="d-flex gap-2">
+
+                        <a href="#" class="btn btn-outline-primary">
+                            Details
+                        </a>
+
+                        <button
+                            type="button"
+                            class="btn btn-danger">
+
+                            Borrow
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="col-12">
+
+        <div class="alert alert-info text-center">
+            No books available.
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

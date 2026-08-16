@@ -1,0 +1,142 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+
+        <!-- Website Logo / Name -->
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            Library Management
+        </a>
+
+
+        <!-- Mobile Menu Button -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMenu"
+            aria-controls="navbarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <!-- Navbar Menu -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <!-- Left Side -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add_book' %}">
+                        Add Book
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add_category' %}">
+                        Add Category
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- Right Side -->
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                {% if request.user.is_authenticated %}
+
+                    <!-- Balance -->
+                    <li class="nav-item me-lg-3">
+                        <span class="navbar-text text-white">
+                            Balance:
+                            <strong>
+                                ৳{{ request.user.account.balance }}
+                            </strong>
+                        </span>
+                    </li>
+
+
+                    <!-- User Dropdown -->
+                    <li class="nav-item dropdown">
+
+                        <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            id="userDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                            {{ request.user.first_name|default:request.user.username }}
+
+                        </a>
+
+                        <ul
+                            class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="userDropdown">
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    Borrowing History
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    Deposit Money
+                                </a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'user_logout' %}">
+                                    Logout
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                {% else %}
+
+                    <!-- Login -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_login' %}">
+                            Login
+                        </a>
+                    </li>
+
+                    <!-- Register -->
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-primary" href="{% url 'user_registration' %}">
+                            Register
+                        </a>
+                    </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
