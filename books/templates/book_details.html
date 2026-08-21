@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+<title>{{ book.title }}</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container py-4">
+
+    <div class="row g-4 align-items-start">
+
+        <!-- Book Image -->
+        <div class="col-md-5">
+
+            <div class="card shadow-sm">
+
+                {% if book.image %}
+                    <img
+                        src="{{ book.image.url }}"
+                        class="img-fluid rounded"
+                        alt="{{ book.title }}"
+                        style="width: 100%; max-height: 550px; object-fit: cover;">
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- Book Information -->
+        <div class="col-md-7">
+
+            <!-- Category -->
+            <span class="badge bg-secondary mb-3">
+                {{ book.category.name }}
+            </span>
+
+            <!-- Title -->
+            <h1 class="fw-bold mb-3">
+                {{ book.title }}
+            </h1>
+
+            <!-- Description -->
+            <h5>Description</h5>
+
+            <p class="text-muted">
+                {{ book.description }}
+            </p>
+
+
+            <hr>
+
+
+            <!-- Borrowing Price -->
+            <h4 class="fw-bold mb-4">
+                Borrowing Price: ৳{{ book.borrowing_price }}
+            </h4>
+
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+
+                {% if request.user.is_authenticated %}
+
+                    <a href="#"
+                       class="btn btn-danger">
+                        Borrow Book
+                    </a>
+
+                {% else %}
+
+                    <a href="{% url 'user_login' %}"
+                       class="btn btn-primary">
+                        Login to Borrow
+                    </a>
+
+                {% endif %}
+
+
+                <a href="{% url 'home' %}"
+                   class="btn btn-outline-secondary">
+                    Back to Books
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Reviews -->
+    <div class="mt-5">
+
+        <hr>
+
+        <h3 class="fw-bold mb-4">
+            Reviews
+        </h3>
+
+        {% if reviews %}
+
+            {% for review in reviews %}
+
+                <div class="card mb-3 shadow-sm">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold">
+                            {{ review.user.username }}
+                        </h6>
+
+                        <p class="mb-0">
+                            {{ review.review_text }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-muted">
+                    No reviews yet.
+                </p>
+
+            {% endfor %}
+
+        {% endif %}
+
+         <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p class="text-red-600 text-sm mb-3">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        {% endif %}
+
+        {% for field in form %}
+            <div class="mb-6">
+
+                <label
+                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+                {% if field.help_text %}
+                    <p class="text-gray-500 text-sm mt-1">
+                        {{ field.help_text }}
+                    </p>
+                {% endif %}
+
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p class="text-red-600 text-sm italic mt-1">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        {% endfor %}
+
+        <div class="flex justify-end mt-6">
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline">
+
+                Add Review
+
+            </button>
+        </div>
+
+    </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

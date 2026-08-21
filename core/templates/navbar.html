@@ -59,7 +59,7 @@
                         <span class="navbar-text text-white">
                             Balance:
                             <strong>
-                                ৳{{ request.user.account.balance }}
+                                ৳{{ request.user.userprofile.balance }}
                             </strong>
                         </span>
                     </li>
@@ -97,7 +97,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'deposite' %}">
                                     Deposit Money
                                 </a>
                             </li>

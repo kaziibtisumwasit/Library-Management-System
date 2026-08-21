@@ -7,7 +7,6 @@
 
 
 {% block body %}
-
 <!-- Page Heading -->
 <div class="text-center mb-4">
     <h1 class="fw-bold">Library Books</h1>
@@ -87,7 +86,7 @@
 
                     <div class="d-flex gap-2">
 
-                        <a href="#" class="btn btn-outline-primary">
+                        <a href="{% url 'book_details' book.pk %}" class="btn btn-outline-primary">
                             Details
                         </a>
 

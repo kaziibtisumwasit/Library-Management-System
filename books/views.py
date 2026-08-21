@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
-from .forms import BookForm,CategoryForm
-
+from .forms import BookForm,CategoryForm,UserReviewForm
+from django.views.generic import DetailView
+from .models import Book,Category,UserReview
 # Create your views here.
 
 
@@ -26,3 +27,34 @@ def addCategory(request):
     else:
         form = CategoryForm()
     return render(request,'add_book.html',{'form':form, 'title' : 'Category'})
+
+# class bookDetails(DetailView): ## IN CBV on DetailView Automatically pass the object id
+#     model = Book
+#     template_name = 'book_details.html'
+#     context_object_name = 'book' ## By default, the context variable name for the object in a DetailView is 'object'. However, you can customize it by setting the context_object_name attribute. In this case, we set it to 'book', so in the template, you can access the book object using {{ book }} instead of {{ object }}.
+    
+    
+# class UserReviewView(DetailView):
+#     pass
+
+
+def bookDetails(request,pk):
+    book = Book.objects.get(pk=pk) ## get the current book object using pk
+    
+    if request.method == 'POST':
+        form = UserReviewForm(request.POST)
+        if form.is_valid():
+            if UserReview.objects.filter(book=book,user=request.user).exists():
+                form.add_error(None,"")
+            else:
+                review = form.save(commit=False) ## Create a new UserReview instance but didn't save it to the database yet
+                review.book = book ## Assign the current book object to the book field of the UserReview instance
+                review.user = request.user ## Assign the current logged-in user to the user field of the UserReview instance
+                review.save() ## Save the UserReview instance to the database
+ 
+    else:
+        form = UserReviewForm()
+    
+    reviews = book.reviews.all() ## get all the reviews of the current book object using related_name 'reviews' in UserReview model
+    return render(request,'book_details.html',{'book':book,'reviews':reviews,'form':form}) ## pass the current book object, all reviews of the current book object and the review
+            
