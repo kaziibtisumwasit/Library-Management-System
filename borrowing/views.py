@@ -18,3 +18,13 @@ def borrowing_book(request,pk):
         return redirect('home') ## after borrowing book redirect to home page
     else:
         return redirect('deposite') ## if current user balance is less than book price then redirect to deposite page
+    
+    
+    
+    
+def borrowingHistory(request):
+    current_user = request.user.userprofile ## get the current logged-in user profile object using request.user.userprofile
+    borrowings = Borrowing.objects.filter(user = current_user)   ### get all the borrowing history of the current logged-in user using related_name 'borrowings' in Borrowing model
+    return render(request,'borrowing_history.html',{'borrowings':borrowings}) ## pass the borrowing history of the current logged-in user to the template
+
+

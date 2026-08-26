@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block head_title %} <title> Borrowing History</title> {% endblock %}
+{% block body %}
+<h1>Borrowing History</h1>
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Book Name</th>
+            <th scope="col">Borrowed Price</th>
+            <th scope="col">Borrowing Date & Time</th>
+            <th scope="col">Returned Date & Time</th>
+            <th scope="col">Returned</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for history in borrowings %}
+
+        <tr>
+            <th scope="row">{{history.id}}</th>
+            <td>{{history.book.title}}</td>
+            <td>{{history.book.borrowing_price}}</td>
+            <td>{{history.borrowed_at}}</td>
+            {% if history.returned_at %}
+            <td>{{history.returned_at}}</td>
+            <td><button type="button" class="btn btn-primary" disabled>Returned</button></td>
+            {% else %}
+            <td>Not Returned Yet</td>
+            <td><a href="#" class="btn btn-danger" disabled>
+                    Return
+                </a></td>
+            {% endif %}
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+
+
+{% endblock %}
