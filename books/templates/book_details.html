@@ -65,7 +65,7 @@
 
                 {% if request.user.is_authenticated %}
 
-                    <a href="#"
+                    <a href="{% url 'borrow_book' book.pk %}"
                        class="btn btn-danger">
                         Borrow Book
                     </a>

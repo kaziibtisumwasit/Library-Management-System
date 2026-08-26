@@ -6,6 +6,8 @@ from .models import UserProfile
 from django.views.generic import CreateView ## Create New object -->> New User Registration 
 from django.contrib.auth.views import LoginView,LogoutView ## LoginView and LogoutView are built-in views provided by Django for handling user authentication. They handle the login and logout processes, respectively.
 from django.contrib.auth import authenticate,login,logout ## for FBV
+from utils.email import sending_email ## for sending email after user registration
+
 
 
 # Create your views here.
@@ -21,6 +23,7 @@ class UserRegistrationView(CreateView):## CreateView Automatically handles the f
         ## in UserProfile model on user object we put into current registered user, so we can access the current logged in user profile using request.user.userprofile 
         UserProfile.objects.create(user=self.object) ## current registered user link into UserProfile Model,
         ## UserProfile Model e Current Registered User er jonno ekta object create korlam, jate kore user registration er por automatically user profile create hoye jai.
+        # sending_email(self.object,'Registration Successful','registration/email_registration.html') ## send email after user registration
         login(self.request,self.object)
         return response
         
@@ -99,6 +102,7 @@ def depositeView(request):
             user_profile = UserProfile.objects.get(user=request.user) ## current logged user
             user_profile.balance += amount
             user_profile.save()
+            # sending_email(request.user,'Deposite Successful','registration/email_deposite.html') ## send email after deposite
             return redirect('home')
             
     else:

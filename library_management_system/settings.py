@@ -19,11 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-k_6v(%(uba&-*h$9+i+21er7fmf8qdculyv=1#c3j6hqa@*i&-"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +36,7 @@ INSTALLED_APPS = [
     "accounts",
     "core",
     "books",
+    "borrowing",
     
 ]
 
@@ -129,3 +126,28 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = '/media/' ## This is the URL that will be used to access media files in the browser. For example, if you have an image file named "example.jpg" in your media directory, you can access it at http://yourdomain.com/media/example.jpg.
 MEDIA_ROOT = BASE_DIR / 'media' # in main project directory or base directory, we will create a folder named media where all the uploaded media files will be stored. This is the absolute filesystem path to the directory where Django will store uploaded files.
+
+
+
+import environ
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')  ## This line reads the .env file and loads the environment variables
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY') ## This is the secret key that Django uses for cryptographic signing. It is retrieved from the .env file, where you have stored it as an environment variable. This is a security measure to keep sensitive information like the secret key out of the source code and version control.
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DEBUG') ## This line retrieves the DEBUG setting from the .env file.
+
+## For sending Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = env('EMAIL_USER') ## This is the email address that will be used as the sender of the email. It is retrieved from the Django settings file, where you have configured your email backend and provided the email address to be used for sending emails.
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD') ## This is the password for the email account specified in EMAIL_HOST_USER. It is also retrieved from the Django settings file, where you have configured your email backend and provided the password for the email account.
+# in .env file element we access env('in_env_file_variable_name') and we can use this variable in our code, so we can keep our sensitive information like email password in .env file and we can access it in our code using env('in_env_file_variable_name').
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

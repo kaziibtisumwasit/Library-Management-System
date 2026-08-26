@@ -27,6 +27,7 @@ urlpatterns = [
     path("category/<int:category_id>/", HomeView, name="category_books"),
     path("books/", include("books.urls")),
     path('accounts/', include("accounts.urls")),
+    path('borrowing/',include("borrowing.urls")),
 ]
 
 
