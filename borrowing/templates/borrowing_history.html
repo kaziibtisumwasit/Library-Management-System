@@ -10,7 +10,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">ID</th>
+            <th scope="col">Borrowed ID</th>
             <th scope="col">Book Name</th>
             <th scope="col">Borrowed Price</th>
             <th scope="col">Borrowing Date & Time</th>
@@ -26,13 +26,13 @@
             <th scope="row">{{history.id}}</th>
             <td>{{history.book.title}}</td>
             <td>{{history.book.borrowing_price}}</td>
-            <td>{{history.borrowed_at}}</td>
+            <td>{{ history.borrowed_at | date:"d M Y, h:i A" }}</td>
             {% if history.returned_at %}
-            <td>{{ history.returned_at|date:"d M Y, h:i A" }}</td>
-            <td><button type="button" class="btn btn-primary" disabled>Returned</button></td>
+            <td>{{ history.returned_at | date:"d M Y, h:i A" }}</td>
+            <td><button type="button" class="btn btn-primary " disabled>Returned</button></td>
             {% else %}
             <td>Not Returned Yet</td>
-            <td><a href="{% url 'return_book' history.pk %}" class="btn btn-danger" disabled>
+            <td><a href="{% url 'return_book' history.pk %}" class="btn btn-danger btn-lg">
                     Return
                 </a></td>
             {% endif %}

@@ -4,9 +4,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 
-def sending_email(current_user,email_subject,template):
+def sending_email(current_user,email_subject,template,email_context = None):
     message = render_to_string(template,{
         'user' : current_user,
+        'email_context' : email_context
     }) ## its convert the template into string and pass the context data into the template, so we can use the context data in the template. Here we pass the current user object into the template, so we can access the current user data in the template.
     to_email = current_user.email ## current_user email address
     

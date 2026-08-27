@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm,DepositeForm
+from .forms import UserRegistrationForm,DepositeForm,UserProfileForm
 from .models import UserProfile
+from django.views.generic import DetailView, UpdateView
 from django.views.generic import CreateView ## Create New object -->> New User Registration 
 from django.contrib.auth.views import LoginView,LogoutView ## LoginView and LogoutView are built-in views provided by Django for handling user authentication. They handle the login and logout processes, respectively.
 from django.contrib.auth import authenticate,login,logout ## for FBV
@@ -102,7 +103,7 @@ def depositeView(request):
             user_profile = UserProfile.objects.get(user=request.user) ## current logged user
             user_profile.balance += amount
             user_profile.save()
-            # sending_email(request.user,'Deposite Successful','registration/email_deposite.html') ## send email after deposite
+            sending_email(request.user,'Deposite Successful','registration/email_deposite.html',email_context = amount) ## send email after deposite
             return redirect('home')
             
     else:
@@ -113,3 +114,24 @@ def depositeView(request):
             'form' : form
         }
         return render(request, 'registration/register.html', context)
+    
+    
+    
+# class UserProfileView(DetailView):
+#     model = UserProfile
+#     template_name = 'register.html'
+#     context_object_name = 'form'
+    
+#     # def get_object(self, queryset=None):
+#     #     return self.request.user.userprofile
+
+
+def UserProfileUpdate(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid:
+            form.save()
+            return redirect('profile_update')
+    else:
+        form = UserProfileForm(instance=request.user)       
+        return render(request, 'registration/register.html', {'form': form, 'title': 'Update Profile', 'button_text': 'Update'})

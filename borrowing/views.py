@@ -37,4 +37,13 @@ def returnBook(request,pk):
     selected_return_history.returned = True ## set the returned field to True
     selected_return_history.returned_at = timezone.now() ## set the returned_at field to current date
     selected_return_history.save() ## save the changes to the database
+    # borrowings = Borrowing.objects.filter(
+    #     user=current_user
+    # ).order_by('-borrowed_at') ## borrowed time onojiye filter korlam
+
+    # return render(
+    #     request,
+    #     'borrowing_history.html',
+    #     {'borrowings': borrowings}
+    # )
     return redirect('borrowing_history') ## after returning book redirect to borrowing history page

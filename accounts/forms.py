@@ -13,3 +13,10 @@ class UserRegistrationForm(UserCreationForm):
 
 class DepositeForm(forms.Form):
     amount = forms.DecimalField(max_digits=10,decimal_places=2,min_value=1,required=True,label='Amount',widget=forms.NumberInput(attrs={'placeholder':'Enter Amount'}))
+    
+    
+    
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
