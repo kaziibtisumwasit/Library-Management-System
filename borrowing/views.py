@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .models import Borrowing
 from accounts.models import UserProfile
 from books.models import Book
+from django.utils import timezone
 # Create your views here.
 
 
@@ -28,3 +29,12 @@ def borrowingHistory(request):
     return render(request,'borrowing_history.html',{'borrowings':borrowings}) ## pass the borrowing history of the current logged-in user to the template
 
 
+def returnBook(request,pk):
+    selected_return_history = Borrowing.objects.get(pk = pk) ## get the current borrowing object using pk
+    current_user = request.user.userprofile ## get the current logged-in user profile object using request.user.userprofile
+    current_user.balance += selected_return_history.book.borrowing_price ## from current_user.balance + selected ## Return The borrowed price
+    current_user.save()
+    selected_return_history.returned = True ## set the returned field to True
+    selected_return_history.returned_at = timezone.now() ## set the returned_at field to current date
+    selected_return_history.save() ## save the changes to the database
+    return redirect('borrowing_history') ## after returning book redirect to borrowing history page

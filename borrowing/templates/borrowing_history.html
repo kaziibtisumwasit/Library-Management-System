@@ -32,7 +32,7 @@
             <td><button type="button" class="btn btn-primary" disabled>Returned</button></td>
             {% else %}
             <td>Not Returned Yet</td>
-            <td><a href="#" class="btn btn-danger" disabled>
+            <td><a href="{% url 'return_book' history.pk %}" class="btn btn-danger" disabled>
                     Return
                 </a></td>
             {% endif %}
