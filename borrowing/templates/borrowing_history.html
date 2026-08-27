@@ -28,7 +28,7 @@
             <td>{{history.book.borrowing_price}}</td>
             <td>{{history.borrowed_at}}</td>
             {% if history.returned_at %}
-            <td>{{history.returned_at}}</td>
+            <td>{{ history.returned_at|date:"d M Y, h:i A" }}</td>
             <td><button type="button" class="btn btn-primary" disabled>Returned</button></td>
             {% else %}
             <td>Not Returned Yet</td>
