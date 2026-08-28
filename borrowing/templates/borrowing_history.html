@@ -1,49 +1,188 @@
 {% extends 'base.html' %}
 
-{% block head_title %} <title> Borrowing History</title> {% endblock %}
+{% block head_title %}
+<title>Borrowing History</title>
+{% endblock %}
+
 {% block body %}
-<h1>Borrowing History</h1>
+
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+    <!-- Page Title -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">
+            Borrowing History
+        </h1>
+
+        <p class="mt-1 text-sm text-gray-500">
+            Here you can see all your borrowed books and their return status.
+        </p>
+    </div>
 
 
+    <!-- Table Container -->
+    <div class="overflow-hidden rounded-xl bg-white shadow-md ring-1 ring-gray-200">
+
+        <!-- Responsive Table -->
+        <div class="overflow-x-auto">
+
+            <table class="min-w-full divide-y divide-gray-200">
+
+                <!-- Table Header -->
+                <thead class="bg-gray-50">
+
+                    <tr>
+
+                        <th
+                            scope="col"
+                            class="whitespace-nowrap px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            Borrowed ID
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="whitespace-nowrap px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            Book Name
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="whitespace-nowrap px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            Borrowed Price
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="whitespace-nowrap px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            Borrowing Date & Time
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="whitespace-nowrap px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            Returned Date & Time
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="whitespace-nowrap px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Borrowed ID</th>
-            <th scope="col">Book Name</th>
-            <th scope="col">Borrowed Price</th>
-            <th scope="col">Borrowing Date & Time</th>
-            <th scope="col">Returned Date & Time</th>
-            <th scope="col">Returned</th>
-        </tr>
-    </thead>
-    <tbody>
+                <!-- Table Body -->
+                <tbody class="divide-y divide-gray-200 bg-white">
 
-        {% for history in borrowings %}
+                    {% for history in borrowings %}
 
-        <tr>
-            <th scope="row">{{history.id}}</th>
-            <td>{{history.book.title}}</td>
-            <td>{{history.book.borrowing_price}}</td>
-            <td>{{ history.borrowed_at | date:"d M Y, h:i A" }}</td>
-            {% if history.returned_at %}
-            <td>{{ history.returned_at | date:"d M Y, h:i A" }}</td>
-            <td><button type="button" class="btn btn-primary " disabled>Returned</button></td>
-            {% else %}
-            <td>Not Returned Yet</td>
-            <td><a href="{% url 'return_book' history.pk %}" class="btn btn-danger btn-lg">
-                    Return
-                </a></td>
-            {% endif %}
+                    <tr class="transition hover:bg-gray-50">
 
-        </tr>
-
-        {% endfor %}
-
-    </tbody>
-</table>
+                        <!-- Borrowed ID -->
+                        <th
+                            scope="row"
+                            class="whitespace-nowrap px-6 py-4 text-sm font-semibold text-gray-900">
+                            #{{ history.id }}
+                        </th>
 
 
+                        <!-- Book Name -->
+                        <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
+                            {{ history.book.title }}
+                        </td>
+
+
+                        <!-- Borrowed Price -->
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                            ${{ history.book.borrowing_price }}
+                        </td>
+
+
+                        <!-- Borrowing Date -->
+                        <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+                            {{ history.borrowed_at|date:"d M Y, h:i A" }}
+                        </td>
+
+
+                        <!-- Returned Date -->
+                        {% if history.returned_at %}
+
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+                                {{ history.returned_at|date:"d M Y, h:i A" }}
+                            </td>
+
+                            <!-- Returned Status -->
+                            <td class="px-6 py-4">
+
+                                <span
+                                    class="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                                    Returned
+                                </span>
+
+                            </td>
+
+                        {% else %}
+
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                                Not Returned Yet
+                            </td>
+
+
+                            <!-- Return Button -->
+                            <td class="px-6 py-4">
+
+                                <a
+                                    href="{% url 'return_book' history.pk %}"
+                                    class="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white no-underline transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+
+                                    Return
+
+                                </a>
+
+                            </td>
+
+                        {% endif %}
+
+                    </tr>
+
+                    {% empty %}
+
+                    <!-- Empty State -->
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="px-6 py-12 text-center">
+
+                            <div class="text-gray-500">
+
+                                <p class="text-lg font-semibold">
+                                    No borrowing history found.
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    You haven't borrowed any books yet.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

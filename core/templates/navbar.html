@@ -1,140 +1,172 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
+<nav class="bg-gray-900 shadow-md">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        <!-- Website Logo / Name -->
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-            Library Management
-        </a>
+        <div class="flex h-12 items-center justify-between">
 
-
-        <!-- Mobile Menu Button -->
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarMenu"
-            aria-controls="navbarMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
+            <!-- Logo -->
+            <a href="{% url 'home' %}"
+               class="text-lg font-bold text-white">
+                Library Management
+            </a>
 
 
-        <!-- Navbar Menu -->
-        <div class="collapse navbar-collapse" id="navbarMenu">
+            <!-- Mobile Button -->
+            <button
+                type="button"
+                onclick="document.getElementById('navbarMenu').classList.toggle('hidden')"
+                class="rounded-md p-1.5 text-gray-300 hover:bg-gray-800 md:hidden">
 
-            <!-- Left Side -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
 
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'home' %}">
-                        Home
-                    </a>
-                </li>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16">
+                    </path>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'add_book' %}">
-                        Add Book
-                    </a>
-                </li>
+                </svg>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'add_category' %}">
-                        Add Category
-                    </a>
-                </li>
+            </button>
 
-            </ul>
+        </div>
 
 
-            <!-- Right Side -->
-            <ul class="navbar-nav ms-auto align-items-lg-center">
+        <!-- Menu -->
+        <div
+            id="navbarMenu"
+            class="hidden border-t border-gray-700 py-2 md:flex md:items-center md:justify-between md:border-0 md:py-0">
+
+            <!-- Left Menu -->
+            <div class="flex flex-col md:flex-row md:items-center">
+
+                <a
+                    href="{% url 'home' %}"
+                    class="rounded px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-800">
+                    Home
+                </a>
+
+                <a
+                    href="{% url 'add_book' %}"
+                    class="rounded px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white">
+                    Add Book
+                </a>
+
+                <a
+                    href="{% url 'add_category' %}"
+                    class="rounded px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white">
+                    Add Category
+                </a>
+
+            </div>
+
+
+            <!-- Right Menu -->
+            <div class="mt-2 md:mt-0">
 
                 {% if request.user.is_authenticated %}
 
-                    <!-- Balance -->
-                    <li class="nav-item me-lg-3">
-                        <span class="navbar-text text-white">
+                    <div class="flex flex-col md:flex-row md:items-center md:gap-3">
+
+                        <!-- Balance -->
+                        <span class="px-3 py-1.5 text-sm text-white">
                             Balance:
                             <strong>
                                 ৳{{ request.user.userprofile.balance }}
                             </strong>
                         </span>
-                    </li>
 
 
-                    <!-- User Dropdown -->
-                    <li class="nav-item dropdown">
+                        <!-- User Dropdown -->
+                        <div class="relative">
 
-                        <a
-                            class="nav-link dropdown-toggle"
-                            href="#"
-                            id="userDropdown"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                            <button
+                                type="button"
+                                onclick="document.getElementById('userDropdown').classList.toggle('hidden')"
+                                class="flex items-center rounded px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-white">
 
-                            {{ request.user.first_name|default:request.user.username }}
+                                {{ request.user.first_name|default:request.user.username }}
 
-                        </a>
+                                <svg
+                                    class="ml-1 h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24">
 
-                        <ul
-                            class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="userDropdown">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 9l-7 7-7-7">
+                                    </path>
 
-                            <li>
-                                <a class="dropdown-item" href="{% url 'profile_update' %}">
+                                </svg>
+
+                            </button>
+
+
+                            <!-- Dropdown -->
+                            <div
+                                id="userDropdown"
+                                class="absolute right-0 z-50 mt-2 hidden w-52 rounded-md bg-white py-1 shadow-lg">
+
+                                <a
+                                    href="{% url 'profile_update' %}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Profile
                                 </a>
-                            </li>
 
-                            <li>
-                                <a class="dropdown-item" href="{% url 'borrowing_history' %}">
+                                <a
+                                    href="{% url 'borrowing_history' %}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Borrowing History
                                 </a>
-                            </li>
 
-                            <li>
-                                <a class="dropdown-item" href="{% url 'deposite' %}">
+                                <a
+                                    href="{% url 'deposite' %}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Deposit Money
                                 </a>
-                            </li>
 
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                                <hr class="my-1">
 
-                            <li>
-                                <a class="dropdown-item text-danger" href="{% url 'user_logout' %}">
+                                <a
+                                    href="{% url 'user_logout' %}"
+                                    class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
                                     Logout
                                 </a>
-                            </li>
 
-                        </ul>
+                            </div>
 
-                    </li>
+                        </div>
+
+                    </div>
 
                 {% else %}
 
-                    <!-- Login -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user_login' %}">
+                    <div class="flex flex-col gap-1 md:flex-row">
+
+                        <a
+                            href="{% url 'user_login' %}"
+                            class="rounded px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white">
                             Login
                         </a>
-                    </li>
 
-                    <!-- Register -->
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary" href="{% url 'user_registration' %}">
+                        <a
+                            href="{% url 'user_registration' %}"
+                            class="rounded bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-700">
                             Register
                         </a>
-                    </li>
+
+                    </div>
 
                 {% endif %}
 
-            </ul>
+            </div>
 
         </div>
 

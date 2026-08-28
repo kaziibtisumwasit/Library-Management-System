@@ -25,7 +25,7 @@ class UserReview(models.Model):
     review_text = models.TextField()
     
     def __str__(self):
-        return f"Review by {self.user.user.username} for {self.book.title}"
+        return f"Review by {self.user.username} for {self.book.title}"
 
 class Category(models.Model):
     name = models.CharField(max_length = 50)

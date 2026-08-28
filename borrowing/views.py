@@ -3,9 +3,10 @@ from .models import Borrowing
 from accounts.models import UserProfile
 from books.models import Book
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-
+@login_required
 def borrowing_book(request,pk):
     selected_book = Book.objects.get(pk = pk) ## get the current book object using pk
     current_user = request.user.userprofile ## get the current logged-in user profile object using request.user.userprofile
@@ -22,13 +23,13 @@ def borrowing_book(request,pk):
     
     
     
-    
+@login_required
 def borrowingHistory(request):
     current_user = request.user.userprofile ## get the current logged-in user profile object using request.user.userprofile
     borrowings = Borrowing.objects.filter(user = current_user)   ### get all the borrowing history of the current logged-in user using related_name 'borrowings' in Borrowing model
     return render(request,'borrowing_history.html',{'borrowings':borrowings}) ## pass the borrowing history of the current logged-in user to the template
 
-
+@login_required
 def returnBook(request,pk):
     selected_return_history = Borrowing.objects.get(pk = pk) ## get the current borrowing object using pk
     current_user = request.user.userprofile ## get the current logged-in user profile object using request.user.userprofile

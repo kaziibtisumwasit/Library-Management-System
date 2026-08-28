@@ -49,8 +49,32 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ["name", "description"]
         
+        widgets = {
+                    'name': forms.TextInput(attrs={
+                        'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                                 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500 '
+                                 'outline-none transition',
+                        'placeholder': 'Enter category name',
+                    }),
+                    'description': forms.Textarea(attrs={
+                        'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                                 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500 '
+                                 'outline-none transition resize-none',
+                        'rows': 5,
+                        'placeholder': 'Write a description...',
+                    }),
+            }
+        
         
 class UserReviewForm(forms.ModelForm):
     class Meta:
         model = UserReview
         fields = ["review_text"] ## ONLY REVIEW TEXT IS REQUIRED FROM USER, BOOK AND USER WILL BE AUTOMATICALLY ADDED IN VIEWS.PY
+        
+        widgets = {
+            'review_text' : forms.Textarea(attrs={
+                'class' : 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none',
+                'rows' : 5,
+                'placeholder' : 'Write your review here...'
+            }) 
+        } 

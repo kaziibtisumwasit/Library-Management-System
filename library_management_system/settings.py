@@ -151,3 +151,7 @@ EMAIL_HOST_USER = env('EMAIL_USER') ## This is the email address that will be us
 EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD') ## This is the password for the email account specified in EMAIL_HOST_USER. It is also retrieved from the Django settings file, where you have configured your email backend and provided the password for the email account.
 # in .env file element we access env('in_env_file_variable_name') and we can use this variable in our code, so we can keep our sensitive information like email password in .env file and we can access it in our code using env('in_env_file_variable_name').
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+## FOR USING @login_required decorator  &  LoginRequiredMixin
+LOGIN_URL = "user_login" # ## This is the URL where users will be redirected if they try to access a view that requires authentication and they are not logged in. In this case, it is set to the URL pattern named "user_login", which should correspond to the login page of your application.

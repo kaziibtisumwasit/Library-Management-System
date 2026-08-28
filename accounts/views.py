@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm,DepositeForm,UserProfileForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import UserRegistrationForm,DepositeForm,UserProfileForm,UserLoginForm
 from .models import UserProfile
 from django.views.generic import DetailView, UpdateView
 from django.views.generic import CreateView ## Create New object -->> New User Registration 
@@ -55,6 +56,9 @@ class UserRegistrationView(CreateView):## CreateView Automatically handles the f
 
 
 class UserLoginView(LoginView):
+    
+    authentication_form = UserLoginForm
+    
     template_name = 'registration/register.html'
     
     def get_success_url(self): ## LoginView By defalt rediret on profile url, but we want to redirect on home page after login, so we override get_success_url method
@@ -92,12 +96,12 @@ class UserLoginView(LoginView):
     
 # class UserLogoutView(LogoutView):
 #     next_page = reverse_lazy('home') ## LogoutView By defalt rediret on profile url, but we want to redirect on home page after logout, so we override next_page attribute
+@login_required
 def UserLogout(request):
     logout(request)
     return redirect('home')
 
-
-
+@login_required
 def depositeView(request):
     if request.method == 'POST':
         form = DepositeForm(request.POST)
@@ -128,7 +132,7 @@ def depositeView(request):
 #     # def get_object(self, queryset=None):
 #     #     return self.request.user.userprofile
 
-
+@login_required
 def UserProfileUpdate(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)

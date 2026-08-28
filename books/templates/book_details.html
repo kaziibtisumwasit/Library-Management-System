@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -5,24 +6,27 @@
 <title>{{ book.title }}</title>
 {% endblock %}
 
-
 {% block body %}
 
-<div class="container py-4">
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
-    <div class="row g-4 align-items-start">
+    <!-- Book Details -->
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-5">
 
         <!-- Book Image -->
-        <div class="col-md-5">
+        <div class="md:col-span-2">
 
-            <div class="card shadow-sm">
+            <div class="overflow-hidden rounded-xl bg-white shadow-md">
 
                 {% if book.image %}
                     <img
                         src="{{ book.image.url }}"
-                        class="img-fluid rounded"
                         alt="{{ book.title }}"
-                        style="width: 100%; max-height: 550px; object-fit: cover;">
+                        class="h-auto max-h-[550px] w-full object-cover">
+                {% else %}
+                    <div class="flex h-96 items-center justify-center bg-gray-100 text-gray-400">
+                        No Image Available
+                    </div>
                 {% endif %}
 
             </div>
@@ -31,57 +35,70 @@
 
 
         <!-- Book Information -->
-        <div class="col-md-7">
+        <div class="md:col-span-3">
 
             <!-- Category -->
-            <span class="badge bg-secondary mb-3">
+            <span class="mb-4 inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700">
                 {{ book.category.name }}
             </span>
 
+
             <!-- Title -->
-            <h1 class="fw-bold mb-3">
+            <h1 class="mb-5 text-3xl font-bold text-gray-900 sm:text-4xl">
                 {{ book.title }}
             </h1>
 
-            <!-- Description -->
-            <h5>Description</h5>
 
-            <p class="text-muted">
+            <!-- Description -->
+            <h2 class="mb-2 text-lg font-semibold text-gray-800">
+                Description
+            </h2>
+
+            <p class="leading-7 text-gray-600">
                 {{ book.description }}
             </p>
 
 
-            <hr>
+            <div class="my-6 border-t border-gray-200"></div>
 
 
             <!-- Borrowing Price -->
-            <h4 class="fw-bold mb-4">
-                Borrowing Price: ৳{{ book.borrowing_price }}
-            </h4>
+            <div class="mb-6">
+                <span class="text-lg font-semibold text-gray-700">
+                    Borrowing Price:
+                </span>
+
+                <span class="text-2xl font-bold text-gray-900">
+                    ৳{{ book.borrowing_price }}
+                </span>
+            </div>
 
 
             <!-- Buttons -->
-            <div class="d-flex gap-2">
+            <div class="flex flex-wrap gap-3">
 
                 {% if request.user.is_authenticated %}
 
-                    <a href="{% url 'borrow_book' book.pk %}"
-                       class="btn btn-danger">
+                    <a
+                        href="{% url 'borrow_book' book.pk %}"
+                        class="no-underline rounded-lg bg-red-600 px-5 py-2.5 font-semibold text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                         Borrow Book
                     </a>
 
                 {% else %}
 
-                    <a href="{% url 'user_login' %}"
-                       class="btn btn-primary">
+                    <a
+                        href="{% url 'user_login' %}"
+                        class="rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         Login to Borrow
                     </a>
 
                 {% endif %}
 
 
-                <a href="{% url 'home' %}"
-                   class="btn btn-outline-secondary">
+                <a
+                    href="{% url 'home' %}"
+                    class="no-underline rounded-lg border border-gray-300 bg-white px-5 py-2.5 font-semibold text-gray-700 transition hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                     Back to Books
                 </a>
 
@@ -93,97 +110,150 @@
 
 
     <!-- Reviews -->
-    <div class="mt-5">
+    <div class="mt-12">
 
-        <hr>
+        <div class="border-t border-gray-200 pt-8">
 
-        <h3 class="fw-bold mb-4">
-            Reviews
-        </h3>
+            <h2 class="mb-6 text-2xl font-bold text-gray-900">
+                Reviews
+            </h2>
 
-        {% if reviews %}
 
-            {% for review in reviews %}
+            <!-- Existing Reviews -->
+            {% if reviews %}
 
-                <div class="card mb-3 shadow-sm">
+                <div class="space-y-4">
 
-                    <div class="card-body">
+                    {% for review in reviews %}
 
-                        <h6 class="fw-bold">
-                            {{ review.user.username }}
-                        </h6>
+                        <div class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200">
 
-                        <p class="mb-0">
-                            {{ review.review_text }}
-                        </p>
+                            <h3 class="mb-2 font-semibold text-gray-900">
+                                {{ review.user.username }}
+                            </h3>
 
-                    </div>
+                            <p class="leading-6 text-gray-600">
+                                {{ review.review_text }}
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
-            {% empty %}
+            {% else %}
 
-                <p class="text-muted">
+                <p class="rounded-lg bg-gray-50 p-4 text-gray-500">
                     No reviews yet.
                 </p>
 
-            {% endfor %}
+            {% endif %}
 
-        {% endif %}
 
-         <form method="post">
-        {% csrf_token %}
+            {% if form is not None %}
 
-        {% if form.non_field_errors %}
-            {% for error in form.non_field_errors %}
-                <p class="text-red-600 text-sm mb-3">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        {% endif %}
 
-        {% for field in form %}
-            <div class="mb-6">
+            <!-- Review Form -->
+            <div class="mt-8 rounded-xl bg-white p-6 shadow-md ring-1 ring-gray-200 sm:p-8">
 
-                <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="{{ field.id_for_label }}">
-                    {{ field.label }}
-                </label>
+                <h3 class="mb-6 text-xl font-bold text-gray-900">
+                    Add a Review
+                </h3>
 
-                {{ field }}
 
-                {% if field.help_text %}
-                    <p class="text-gray-500 text-sm mt-1">
-                        {{ field.help_text }}
-                    </p>
-                {% endif %}
+                <form method="post" class="space-y-5">
 
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <p class="text-red-600 text-sm italic mt-1">
-                            {{ error }}
-                        </p>
+                    {% csrf_token %}
+
+
+                    <!-- Non Field Errors -->
+                    {% if form.non_field_errors %}
+
+                        <div class="rounded-lg border border-red-200 bg-red-50 p-4">
+
+                            {% for error in form.non_field_errors %}
+
+                                <p class="text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- Form Fields -->
+                    {% for field in form %}
+
+                        <div>
+
+                            <label
+                                for="{{ field.id_for_label }}"
+                                class="mb-2 block text-sm font-semibold text-gray-700">
+
+                                {{ field.label }}
+
+                            </label>
+
+
+                            {{ field }}
+
+
+                            <!-- Help Text -->
+                            {% if field.help_text %}
+
+                                <p class="mt-1 text-sm text-gray-500">
+                                    {{ field.help_text }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- Field Errors -->
+                            {% if field.errors %}
+
+                                {% for error in field.errors %}
+
+                                    <p class="mt-1 text-sm italic text-red-600">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
                     {% endfor %}
-                {% endif %}
+
+
+                    <!-- Submit -->
+                    <div class="flex justify-end pt-2">
+
+                        <button
+                            type="submit"
+                            class="rounded-lg bg-blue-600 px-6 py-2.5 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+
+                            Add Review
+
+                        </button>
+
+                    </div>
+
+                </form>
 
             </div>
-        {% endfor %}
 
-        <div class="flex justify-end mt-6">
-            <button
-                type="submit"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline">
+            {% endif %}
 
-                Add Review
-
-            </button>
         </div>
-
-    </form>
 
     </div>
 
 </div>
 
 {% endblock %}
+```

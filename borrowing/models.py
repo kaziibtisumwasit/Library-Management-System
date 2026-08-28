@@ -13,3 +13,7 @@ class Borrowing(models.Model):
     returned_at = models.DateTimeField(null=True,blank=True)
     returned = models.BooleanField(default = False)
     ## related_name is used to access the related objects from the other side of the relationship. For example, if you have a UserProfile object, you can access all the borrowed books of that user using user.borrowings.all() and if you have a Book object, you can access all the users who borrowed that book using book.borrowings.all()
+    
+    
+    def __str__(self):
+        return f"{self.user.user.username} borrowed {self.book.title} on {self.borrowed_at.strftime('%Y-%m-%d %H:%M:%S')}"
