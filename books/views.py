@@ -14,7 +14,7 @@ def addBook(request):
             return redirect('home')
     else:
         form = BookForm()
-    return render(request , "add_book.html",{'form' : form , 'title' : 'Book'})
+    return render(request , "add_book.html",{'form' : form , 'title' : 'New Book','button_text' : 'Add Book'})
 
 
 

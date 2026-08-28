@@ -8,6 +8,41 @@ class BookForm(forms.ModelForm):
         model = Book
         fields = ["title", "description","category", "image", "borrowing_price",]
         
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                         'focus:ring-2 focus:ring-blue-500 focus:border-blue-500 '
+                         'outline-none transition',
+                'placeholder': 'Enter book title',
+            }),
+
+            'description': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                         'focus:ring-2 focus:ring-blue-500 focus:border-blue-500 '
+                         'outline-none transition resize-none',
+                'rows': 5,
+                'placeholder': 'Write a short description...',
+            }),
+
+            'category': forms.Select(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                         'focus:ring-2 focus:ring-blue-500 focus:border-blue-500 '
+                         'outline-none transition bg-white',
+            }),
+
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                         'bg-gray-50 cursor-pointer',
+            }),
+
+            'borrowing_price': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 '
+                         'focus:ring-2 focus:ring-blue-500 focus:border-blue-500 '
+                         'outline-none transition',
+                'placeholder': 'Enter borrowing price',
+                'step': '0.01',
+            }),
+        }
         
 class CategoryForm(forms.ModelForm):
     class Meta:
