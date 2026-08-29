@@ -73,12 +73,13 @@ WSGI_APPLICATION = "library_management_system.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 
 
 # Password validation
@@ -153,5 +154,22 @@ EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD') ## This is the password for the emai
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
-## FOR USING @login_required decorator  &  LoginRequiredMixin
+## FOR USING @login_required decorator  & LoginRequiredMixin
 LOGIN_URL = "user_login" # ## This is the URL where users will be redirected if they try to access a view that requires authentication and they are not logged in. In this case, it is set to the URL pattern named "user_login", which should correspond to the login page of your application.
+
+
+
+
+
+
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("DB_NAME"),
+        "USER": env('DB_USER'),
+        "PASSWORD": env('DB_PASS'),
+        "HOST": env('DB_HOST'  ),
+        "PORT": env('DB_PORT'),
+    }
+}
